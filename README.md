@@ -1,5 +1,5 @@
 # oss-client
-oss-client 集成了阿里云OSS、腾讯云对象存储和七牛云对象存储，为不同的对象存储实现了统一的Client，方便使用
+集成了阿里云OSS、腾讯云对象存储和七牛云对象存储，为不同的对象存储实现了统一的Client，方便使用
 
 ## Install
 > pip install oss-client

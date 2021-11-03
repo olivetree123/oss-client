@@ -14,7 +14,7 @@ setup(
     version="0.1.0",
     author="olivetree",
     license="MIT",
-    packages=["oss-client"],
+    packages=["oss_client"],
     author_email="olivetree123@163.com",
     url="https://github.com/olivetree123/oss-client",
     description="OSS Client for AliyunOSS/TencentOSS/QiniuOSS",
