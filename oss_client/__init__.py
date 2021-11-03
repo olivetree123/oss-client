@@ -6,4 +6,4 @@ from .client import (
     StorageClient,
 )
 
-from .fileobj import StorageClient
+from .fileobj import FileObject
