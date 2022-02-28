@@ -128,14 +128,13 @@ class AliyunClient(StorageClient):
         self.endpoint = endpoint
         self.bucket = bucket
         self.auth = oss2.Auth(access_key, secret_key)
+        self.conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
 
     def put_object(self, key, body):
-        conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
-        return conn.put_object(key=key, data=body)
+        return self.conn.put_object(key=key, data=body)
 
     def get_object(self, key, range):
-        conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
-        return conn.get_object(key, byte_range=range)
+        return self.conn.get_object(key, byte_range=range)
 
     def get_url(self, key):
         return f"https://{self.bucket}.{self.endpoint}/{key}"

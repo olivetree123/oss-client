@@ -1,3 +1,4 @@
+from pydoc import cli
 from oss_client import AliyunClient
 
 client = AliyunClient(
@@ -6,3 +7,5 @@ client = AliyunClient(
     endpoint="ALY_OSS_ENDPOINT",
     bucket="ALY_OSS_BUCKET",
 )
+
+client.put_object("test.txt", "oss-client test")
