@@ -54,6 +54,9 @@ class QiniuClient(StorageClient):
         self.bucket = bucket
         self.put_data = put_data
 
+    def get_url(self, key):
+        pass
+
     def read(self, key, range=None):
         base_url = "http://{BUCKET_URL}/{KEY}".format(
             BUCKET_URL=self.bucket,
@@ -95,6 +98,9 @@ class TencentClient(StorageClient):
         self.conn = CosS3Client(config)
         self.bucket = bucket
 
+    def get_url(self, key):
+        pass
+
     def read(self, key, range=None):
         params = {
             "Bucket": self.bucket,
@@ -130,6 +136,9 @@ class AliyunClient(StorageClient):
     def get_object(self, key, range):
         conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
         return conn.get_object(key, byte_range=range)
+
+    def get_url(self, key):
+        return f"https://{self.bucket}.{self.endpoint}/{key}"
 
     def read(self, key, range=None):
         r = self.get_object(

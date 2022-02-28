@@ -25,6 +25,8 @@ class FileObject(object):
         return self.hash_value
 
     def key(self):
+        if self.suffix:
+            return ".".join([self.hash_value, self.suffix])
         return self.hash_value
 
     def content(self, range=None):
