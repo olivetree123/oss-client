@@ -102,11 +102,11 @@ class TencentClient(StorageClient):
         }
         if range:
             params["Range"] = range
-        r = self.get_object(**params)
+        r = self.conn.get_object(**params)
         return r["Body"].get_raw_stream().read()
 
     def write(self, file_obj: FileObject):
-        r = self.put_object(
+        r = self.conn.put_object(
             Bucket=self.bucket,
             Body=file_obj.obj.read(),
             Key=file_obj.key(),
@@ -123,17 +123,16 @@ class AliyunClient(StorageClient):
         self.bucket = bucket
         self.auth = oss2.Auth(access_key, secret_key)
 
-    def put_object(self, bucket, key, body):
-        conn = oss2.Bucket(self.auth, self.endpoint, bucket)
+    def put_object(self, key, body):
+        conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
         return conn.put_object(key=key, data=body)
 
-    def get_object(self, bucket, key, range):
-        conn = oss2.Bucket(self.auth, self.endpoint, bucket)
+    def get_object(self, key, range):
+        conn = oss2.Bucket(self.auth, self.endpoint, self.bucket)
         return conn.get_object(key, byte_range=range)
 
     def read(self, key, range=None):
         r = self.get_object(
-            bucket=self.bucket,
             key=key,
             range=range,
         )
@@ -141,7 +140,6 @@ class AliyunClient(StorageClient):
 
     def write(self, file_obj: FileObject):
         r = self.put_object(
-            bucket=self.bucket,
             key=file_obj.key(),
             body=file_obj.obj.read(),
         )
