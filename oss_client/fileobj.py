@@ -10,19 +10,28 @@ class FileObject(object):
         self.name = name
         self.suffix = ""
         self.length = 0
+        self._content = None
         self.hash_value = hash_value
         self.storage = storage
         names = name.split(".")
         if len(names) > 1:
             self.suffix = names[-1]
         if not self.hash_value and self.obj:
-            content = self.obj.read()
-            self.length = len(content)
-            self.hash_value = content_md5(content)
+            self._content = self.obj.read()
+            self.length = len(self._content)
+            self.hash_value = content_md5(self._content)
             self.obj.seek(0, os.SEEK_SET)
 
     def __str__(self):
         return self.hash_value
+    
+    def read(self):
+        if self._content:
+            return self._content
+        if self.obj:
+            self._content = self.obj.read()
+            self.obj.seek(0, os.SEEK_SET)
+        return self._content
 
     def key(self):
         if self.suffix:
@@ -30,8 +39,10 @@ class FileObject(object):
         return self.hash_value
 
     def content(self, range=None):
-        if self.obj:
-            return self.obj.read()
+        r = self.read()
+        if r:
+            return r
         if self.storage:
-            return self.storage.read(self.key(), range)
+            self._content = self.storage.read(self.key(), range)
+            return self._content
         raise Exception("can not find content")
